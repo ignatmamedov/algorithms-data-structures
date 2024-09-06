@@ -5,6 +5,7 @@ import nl.saxion.cds.collection.*;
 import java.util.Comparator;
 import java.util.Iterator;
 
+
 public class MyArrayList<V> implements SaxList<V>, SaxSearchable<V>, SaxSortable<V> {
     // Minimal size of the internal array
     private static final int MINIMUM_SIZE = 32;
