@@ -183,9 +183,30 @@ public class MyArrayList<V> implements SaxList<V>, SaxSearchable<V>, SaxSortable
         return builder.toString();
     }
 
+    /**
+     * Checks if the list is sorted based on the specified comparator.
+     *
+     * @param comparator comparator to determine the sorting order
+     * @return true if the list is sorted, false otherwise
+     */
     @Override
     public boolean isSorted(Comparator<V> comparator) {
         // TODO: implement isSorted()
+        for (int index =0; index < this.size() - 1;  index++){
+            V current = this.get(index);
+            V next = this.get(index + 1);
+
+            if (current == null && next != null) {
+                return false;
+            }
+
+            if (next != null){
+                if (comparator.compare(current, next) > 0){
+                    return false;
+                }
+            }
+
+        }
         return true;
     }
 
@@ -265,6 +286,21 @@ public class MyArrayList<V> implements SaxList<V>, SaxSearchable<V>, SaxSortable
         int index = right;
 
         // TODO: complete splitInPlace()
+        while (left <= right) {
+            if (left <= end && comparator.compare(this.get(left), pivot) <= 0) {
+                left++;
+            }
+
+            if (right >= begin && comparator.compare(this.get(right), pivot) > 0) {
+                right--;
+            }
+
+            if (left < right) {
+                this.swap(left, right);
+            }
+
+        }
+        this.swap(begin, right);
 
         return right; // Returns index of pivot
     }
@@ -279,9 +315,37 @@ public class MyArrayList<V> implements SaxList<V>, SaxSearchable<V>, SaxSortable
         return SaxSearchable.NOT_FOUND;
     }
 
+    /**
+     * Performs a binary search for the specified element using the given comparator.
+     *
+     * @param element     element to search for
+     * @param comparator comparator to determine the order of elements
+     * @throws ListNotSortedException if list is not sorted
+     * @return the index of the element if found, otherwise - 1
+     */
     @Override
     public int binarySearch(Comparator<V> comparator, V element) {
         // TODO: implement binarySearch()
+        if (!this.isSorted(comparator)){
+            throw new ListNotSortedException();
+        }
+
+        int left = 0;
+        int right = this.size();
+        int middle = (left + right) / 2;
+        while (left < right){
+            if (comparator.compare(this.get(middle), element) == 0){
+                return middle;
+            }
+            if (comparator.compare(this.get(middle), element) < 0){
+                left = middle + 1;
+            }
+            else {
+                right = middle;
+            }
+            middle = (left + right) / 2;
+        }
+
         return SaxSearchable.NOT_FOUND;
     }
 
