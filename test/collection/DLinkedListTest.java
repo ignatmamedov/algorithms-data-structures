@@ -3,6 +3,7 @@ package collection;
 import nl.saxion.cds.collection.EmptyCollectionException;
 import nl.saxion.cds.collection.ValueNotFoundException;
 import nl.saxion.cds.solution.DLinkedList;
+import java.util.Iterator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -157,6 +158,24 @@ class DLinkedListTest {
         assertEquals(0, list.size());
         list.addLast(1);
         assertEquals(1, list.size());
+    }
+
+    @Test
+    public void iteratorShouldTraverseAllElementsInOrder() {
+        DLinkedList<Integer> list = new DLinkedList<>();
+
+        Iterator<Integer> iterator = list.iterator();
+        assertFalse(iterator.hasNext());
+
+        list.addLast(1);
+        list.addLast(2);
+        list.addLast(3);
+
+        iterator = list.iterator();
+        assertEquals(1, iterator.next());
+        assertEquals(2, iterator.next());
+        assertEquals(3, iterator.next());
+        assertFalse(iterator.hasNext());
     }
 
     @Test

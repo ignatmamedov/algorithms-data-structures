@@ -151,7 +151,7 @@ public class MyArrayList<V> implements SaxList<V>, SaxSearchable<V>, SaxSortable
      * Check if the array of elements can hold another element and if not extend the array.
      * Make room on position index and adjust size.
      *
-     * @param index position where to make room for a new element, valid 0..size (size == add at end)
+     * @param index position where to make room for a new element, valid 0.. size (size == add at end)
      * @throws IndexOutOfBoundsException index < 0 or > size
      */
     private void checkAndExtendSize(int index) throws IndexOutOfBoundsException {
