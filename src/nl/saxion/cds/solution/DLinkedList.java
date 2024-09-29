@@ -44,7 +44,7 @@ public class DLinkedList<V> implements SaxList<V> {
     @Override
     public V get(int index) throws IndexOutOfBoundsException {
         DLinkNode<V> current = head;
-        V value = null;
+        V value;
 
         if (index >=0 && index < this.size()) {
             for (int i = 0; i < index; i++) {
@@ -65,7 +65,7 @@ public class DLinkedList<V> implements SaxList<V> {
      */
     @Override
     public void addLast(V value) {
-        DLinkNode<V> newNode = new DLinkNode<V>(value);
+        DLinkNode<V> newNode = new DLinkNode<>(value);
         if (isEmpty()) {
             head = newNode;
         } else {
@@ -83,7 +83,7 @@ public class DLinkedList<V> implements SaxList<V> {
      */
     @Override
     public void addFirst(V value) {
-        DLinkNode<V> newNode = new DLinkNode<V>(value);
+        DLinkNode<V> newNode = new DLinkNode<>(value);
         if (!isEmpty()) {
             newNode.setNext(head);
             head.setPrev(newNode);
@@ -118,7 +118,7 @@ public class DLinkedList<V> implements SaxList<V> {
                 previous = previous.getNext();
             }
 
-            DLinkNode<V> current = new DLinkNode<V>(value);
+            DLinkNode<V> current = new DLinkNode<>(value);
             DLinkNode<V> nextNode = previous.getNext();
             current.setNext(nextNode);
             nextNode.setPrev(current);
@@ -273,7 +273,7 @@ public class DLinkedList<V> implements SaxList<V> {
      */
     @Override
     public Iterator<V> iterator() {
-        return new DLinkIterator<V>(this.head);
+        return new DLinkIterator<>(this.head);
     }
 
     /**
@@ -310,9 +310,9 @@ public class DLinkedList<V> implements SaxList<V> {
         builder.append(" {\n");
         DLinkNode<V> current = head;
         for (int i = 0; i < size - 1; ++i) {
-            V from = (V) current.getValue();
+            V from = current.getValue();
             current = current.getNext();
-            V to = (V) current.getValue();
+            V to = current.getValue();
             builder.append(String.format("\"%s\" -> \"%s\"\n", (from == null ? "NULL_" + i : from.toString()), (to == null ? "NULL_" + (i + 1) : to.toString())));
         }
         builder.append("}");
@@ -320,10 +320,116 @@ public class DLinkedList<V> implements SaxList<V> {
     }
 
     /**
-     * Clears the entire list, removing all elements.
+     * Represents a node in a doubly linked list, which stores a value and references to the next and previous nodes.
+     *
+     * @param <V> the type of element stored in the node
      */
-    @Override
-    public String graphViz() {
-        return SaxList.super.graphViz();
+    private class DLinkNode<V> {
+        private V value;
+        private DLinkNode<V> next, previous;
+
+        /**
+         * Constructs a node with the specified value and no references to other nodes.
+         *
+         * @param value the value to be stored in this node
+         */
+        public DLinkNode(V value) {
+            this.value = value;
+        }
+
+        /**
+         * Returns the next node in the list.
+         *
+         * @return the next node
+         */
+        public DLinkNode<V> getNext() {
+            return next;
+        }
+
+        /**
+         * Sets the reference to the next node in the list.
+         *
+         * @param next the node to be set as the next node
+         */
+        public void setNext(DLinkNode<V> next) {
+            this.next = next;
+        }
+
+        /**
+         * Returns the previous node in the list.
+         *
+         * @return the previous node
+         */
+        public DLinkNode<V> getPrev() {
+            return previous;
+        }
+
+        /**
+         * Sets the reference to the previous node in the list.
+         *
+         * @param previous the node to be set as the previous node
+         */
+        public void setPrev(DLinkNode<V> previous) {
+            this.previous = previous;
+        }
+
+        /**
+         * Returns the value stored in this node.
+         *
+         * @return the value stored in the node
+         */
+        public V getValue() {
+            return value;
+        }
+
+        /**
+         * Sets the value to be stored in this node.
+         *
+         * @param value the value to be set
+         */
+        public void setValue(V value) {
+            this.value = value;
+        }
+    }
+
+    /**
+     * An iterator for traversing a doubly linked list.
+     *
+     * @param <T> the type of elements returned by this iterator
+     */
+    private class DLinkIterator<T> implements Iterator<T> {
+        private DLinkNode<T> current;
+
+        /**
+         * Constructs an iterator starting at the given head node.
+         *
+         * @param head the first node of the list to iterate over
+         */
+        DLinkIterator(DLinkNode<T> head) {
+            current = head;
+        }
+
+        /**
+         * Returns {@code true} if the iteration has more elements.
+         *
+         * @return {@code true} if the iteration has more elements
+         */
+        @Override
+        public boolean hasNext() {
+            return current != null;
+        }
+
+
+        /**
+         * Returns the next element in the iteration and advances the iterator.
+         *
+         * @return the next element in the iteration
+         */
+        @Override
+        public T next() {
+            T result = current.getValue();
+            current = current.getNext();
+            return result;
+        }
     }
 }
