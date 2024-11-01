@@ -20,6 +20,7 @@ class DLinkedListTest {
 
     @Test
     void GivenEmptyList_WhenAddingElements_ConfirmCorrectSizeAndContent() {
+        String current = null;
         list.addLast(1);
         list.addLast(2);
         list.addLast(3);
@@ -105,7 +106,7 @@ class DLinkedListTest {
         list.addLast(1);
         list.addLast(2);
         list.addLast(3);
-        list.remove((Integer) 2);
+        list.remove(2);
         assertEquals(2, list.size());
         assertFalse(list.contains(2));
     }
@@ -183,10 +184,11 @@ class DLinkedListTest {
         list.addLast(1);
         list.addLast(2);
         list.addLast(3);
-        String expectedGraphViz = "digraph list {\n" +
-                "\"1\" -> \"2\"\n" +
-                "\"2\" -> \"3\"\n" +
-                "}";
+        String expectedGraphViz = """
+                digraph list {
+                "1" -> "2"
+                "2" -> "3"
+                }""";
         assertEquals(expectedGraphViz, list.graphViz("list"));
     }
 }

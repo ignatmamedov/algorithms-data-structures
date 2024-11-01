@@ -25,7 +25,7 @@ public class MyHashMap<K, V> implements SaxHashMap<K, V> {
     public MyHashMap(int capacity) {
         this.size = 0;
         table = (Node<K, V>[]) new Node[capacity];
-        keys = new MyArrayList<K> ();
+        keys = new MyArrayList<> ();
     }
 
     /**
@@ -105,7 +105,7 @@ public class MyHashMap<K, V> implements SaxHashMap<K, V> {
      */
     @Override
     public boolean contains(K key) {
-        return get(key) != null;
+        return getNode(key) != null;
     }
 
     /**
@@ -116,11 +116,19 @@ public class MyHashMap<K, V> implements SaxHashMap<K, V> {
      */
     @Override
     public V get(K key) {
+        Node<K, V> node = getNode(key);
+        if (node != null){
+            return node.getValue();
+        }
+        return null;
+    }
+
+    public Node<K, V> getNode(K key) {
         int index = getIndex(key);
         Node<K, V> node = table[index];
         while (node != null){
             if(node.getKey().equals(key)){
-                return node.getValue();
+                return node;
             }
             node = node.getNext();
         }
@@ -197,7 +205,6 @@ public class MyHashMap<K, V> implements SaxHashMap<K, V> {
      * Check if the array of elements can hold another element and if not extend the array.
      * Make room on position index and adjust size.
      *
-     * @param index position where to make room for a new element, valid 0.. size (size == add at end)
      * @throws IndexOutOfBoundsException index < 0 or > size
      */
     private void checkAndExtendSize(){
@@ -223,7 +230,7 @@ public class MyHashMap<K, V> implements SaxHashMap<K, V> {
      * @param <K> type of keys
      * @param <V> type of values
      */
-    private class Node<K, V> {
+    private static class Node<K, V> {
         private final K key;
         private final V value;
         private Node<K,V> next;
