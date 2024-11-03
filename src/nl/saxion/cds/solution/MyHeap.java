@@ -41,7 +41,31 @@ public class MyHeap<V extends Comparable<V>> implements SaxHeap<V> {
      */
     @Override
     public String graphViz(String name) {
-        return elements.graphViz(name);
+        StringBuilder sb = new StringBuilder();
+        sb.append("digraph ").append(name).append(" {\n");
+        sb.append("    node [shape=circle];\n");
+
+        // Сначала добавляем все узлы
+        for (int i = 0; i < elements.size(); i++) {
+            sb.append("    \"").append(elements.get(i)).append("\";\n");
+        }
+
+        // Затем добавляем связи между узлами
+        for (int i = 0; i < elements.size(); i++) {
+            int leftChildIndex = 2 * i + 1;
+            int rightChildIndex = 2 * i + 2;
+
+            if (leftChildIndex < elements.size()) {
+                sb.append("    \"").append(elements.get(i)).append("\" -> \"")
+                        .append(elements.get(leftChildIndex)).append("\";\n");
+            }
+            if (rightChildIndex < elements.size()) {
+                sb.append("    \"").append(elements.get(i)).append("\" -> \"")
+                        .append(elements.get(rightChildIndex)).append("\";\n");
+            }
+        }
+        sb.append("}\n");
+        return sb.toString();
     }
 
     /**

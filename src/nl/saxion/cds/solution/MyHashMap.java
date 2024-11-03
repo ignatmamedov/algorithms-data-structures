@@ -163,6 +163,17 @@ public class MyHashMap<K, V> implements SaxHashMap<K, V> {
         }
     }
 
+    public void put(K key, V value) {
+        if (this.contains(key)) {
+            Node<K, V> node = getNode(key);
+            if (node != null) {
+                node.setValue(value);
+            }
+        } else {
+            add(key, value);
+        }
+    }
+
     /**
      * Remove the value which is mapped with the key from the collection
      *
@@ -177,18 +188,23 @@ public class MyHashMap<K, V> implements SaxHashMap<K, V> {
         }
         int index = getIndex(key);
         Node<K, V> node = table[index];
-        while (node.getNext() != null){
-            if (node.getNext().getKey().equals(key)){
+        Node<K, V> previous = null;
+
+        while (node != null) {
+            if (node.getKey().equals(key)) {
                 keys.remove(key);
                 size--;
-                return node.getNext().getValue();
+                if (previous == null) {
+                    table[index] = node.getNext();
+                } else {
+                    previous.setNext(node.getNext());
+                }
+                return node.getValue();
             }
+            previous = node;
             node = node.getNext();
-            }
-        table[index] = null;
-        keys.remove(key);
-        size--;
-        return node.getValue();
+        }
+        return null;
     }
 
     /**
@@ -207,21 +223,23 @@ public class MyHashMap<K, V> implements SaxHashMap<K, V> {
      *
      * @throws IndexOutOfBoundsException index < 0 or > size
      */
-    private void checkAndExtendSize(){
-        if (table.length < size()) {
-            // extend array by doubling in size if size is smaller than maximum extension
-            int capacity = table.length * 2;
-            Node<K, V>[] newTable = (Node<K, V>[]) new Node[capacity];
+    private void checkAndExtendSize() {
+        if (size >= table.length) {
+            int newCapacity = table.length * 2;
+            Node<K, V>[] newTable = (Node<K, V>[]) new Node[newCapacity];
 
             for (Node<K, V> node : table) {
-                if (node != null) {
-                    int newIndex = (capacity - 1) & node.getKey().hashCode();
+                while (node != null) {
+                    Node<K, V> nextNode = node.getNext();
+                    int newIndex = (newCapacity - 1) & node.getKey().hashCode();
+                    node.setNext(newTable[newIndex]);
                     newTable[newIndex] = node;
+                    node = nextNode;
                 }
             }
             table = newTable;
         }
-        ++size;
+        size++;
     }
 
     /**
@@ -232,7 +250,7 @@ public class MyHashMap<K, V> implements SaxHashMap<K, V> {
      */
     private static class Node<K, V> {
         private final K key;
-        private final V value;
+        private V value;
         private Node<K,V> next;
 
         /**
@@ -281,6 +299,11 @@ public class MyHashMap<K, V> implements SaxHashMap<K, V> {
             this.key = key;
             this.value = value;
         }
+
+        public void setValue(V value){
+            this.value = value;
+        }
+
     }
 }
 
