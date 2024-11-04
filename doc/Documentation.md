@@ -271,6 +271,15 @@ Implementation: [MyGraph.java](../src/nl/saxion/cds/solution/util/MyGraph.java)
   - **`CSVReader`**: Reads station and track data from CSV files and initializes `MyGraph<Station>` and `MyHashMap<String, Station>`.
   - **`MyGraph`**: A directed, weighted graph representing connections between stations.
 
+
+## Justification Table
+| **Decision**                           | **Reason**                                             | **Alternatives Considered**      | **Impact**                               |
+|----------------------------------------|-------------------------------------------------------|----------------------------------|------------------------------------------|
+| **Using MyArrayList for Dynamic Lists** | Efficiently manages dynamic arrays with \(O(1)\) amortized time complexity for adding elements. | Using native arrays (fixed size) | Allows flexible storage of varying numbers of elements without pre-allocation. |
+| **Implementing MyHashMap for Fast Access** | Provides average \(O(1)\) time complexity for lookups, crucial for station data retrieval. | Using a simple array for storage | Significantly speeds up data access compared to linear search methods. |
+| **Choosing MyGraph for Station Connections** | Suitable for modeling the complex relationships between stations as a directed, weighted graph. | DlinkedList                      | More memory-efficient for sparse connections; easier to implement pathfinding algorithms. |
+| **Selecting A* and Dijkstra's Algorithms** | Both algorithms provide optimal solutions for shortest path problems in graphs. | Dijkstra algorithm               | A* is more efficient for specific cases where heuristic data is available. |
+| **Using AVL Tree for My BST Implementation** | Guarantees \(O(\log N)\) time complexity for insertions, deletions, and lookups while maintaining balance. | Red-Black Tree                   | AVL trees provide faster lookups due to stricter balancing, though with more rotations during insertions and deletions. |
 # Station search by station code
 ### Implementation:
 - **Method**: [`showStationByCode`](../src/nl/saxion/cds/solution/MainTerminal.java#L122)
