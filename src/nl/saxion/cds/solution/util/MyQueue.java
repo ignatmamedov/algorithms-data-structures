@@ -1,11 +1,19 @@
-package nl.saxion.cds.solution;
+package nl.saxion.cds.solution.util;
 
 import nl.saxion.cds.collection.EmptyCollectionException;
 import nl.saxion.cds.collection.SaxQueue;
 
+/**
+ * Custom queue implementation using a doubly linked list to store elements, supporting basic queue operations.
+ *
+ * @param <V> the type of elements stored in the queue
+ */
 public class MyQueue<V> implements SaxQueue<V> {
     private final DLinkedList<V> elements;
 
+    /**
+     * Initializes a new, empty queue.
+     */
     public MyQueue(){
         this.elements = new DLinkedList<>();
     }

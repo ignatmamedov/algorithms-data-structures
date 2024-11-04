@@ -1,8 +1,8 @@
-package collection;
+package nl.saxion.cds.solution.util;
 
 
 import nl.saxion.cds.collection.EmptyCollectionException;
-import nl.saxion.cds.solution.MyQueue;
+import nl.saxion.cds.solution.util.MyQueue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

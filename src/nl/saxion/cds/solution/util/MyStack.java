@@ -1,14 +1,23 @@
-package nl.saxion.cds.solution;
+package nl.saxion.cds.solution.util;
 
 import nl.saxion.cds.collection.EmptyCollectionException;
 import nl.saxion.cds.collection.SaxStack;
 
+/**
+ * Custom stack implementation using an array list to store elements, supporting basic stack operations.
+ *
+ * @param <V> the type of elements stored in the stack
+ */
 public class MyStack<V> implements SaxStack<V> {
     private final MyArrayList<V> elements;
 
+    /**
+     * Initializes a new, empty stack.
+     */
     public MyStack() {
         this.elements = new MyArrayList<>();
     }
+
     /**
      * Determines if the collection has no elements
      *

@@ -1,4 +1,4 @@
-package nl.saxion.cds.solution;
+package nl.saxion.cds.solution.util;
 
 import nl.saxion.cds.collection.EmptyCollectionException;
 import nl.saxion.cds.collection.SaxList;

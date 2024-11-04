@@ -1,9 +1,9 @@
-package collection;
+package nl.saxion.cds.solution.util;
 
 import nl.saxion.cds.collection.DuplicateKeyException;
 import nl.saxion.cds.collection.KeyNotFoundException;
 import nl.saxion.cds.collection.SaxList;
-import nl.saxion.cds.solution.MyBinaryTree;
+import nl.saxion.cds.solution.util.MyBinaryTree;
 import static org.junit.jupiter.api.Assertions.*;
 
 

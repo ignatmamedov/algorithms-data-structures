@@ -1,9 +1,9 @@
-package collection;
+package nl.saxion.cds.solution.util;
 
 import nl.saxion.cds.collection.DuplicateKeyException;
 import nl.saxion.cds.collection.KeyNotFoundException;
 import nl.saxion.cds.collection.SaxList;
-import nl.saxion.cds.solution.MyHashMap;
+import nl.saxion.cds.solution.util.MyHashMap;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
