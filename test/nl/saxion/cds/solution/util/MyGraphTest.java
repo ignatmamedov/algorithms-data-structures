@@ -1,9 +1,9 @@
-package collection;
+package nl.saxion.cds.solution.util;
 
 import nl.saxion.cds.collection.KeyNotFoundException;
 import nl.saxion.cds.collection.SaxGraph;
 import nl.saxion.cds.collection.SaxList;
-import nl.saxion.cds.solution.MyGraph;
+import nl.saxion.cds.solution.util.MyGraph;
 
 import static org.junit.jupiter.api.Assertions.*;
 import java.util.Iterator;
@@ -186,7 +186,7 @@ class MyGraphTest<V> {
     @Test
     void GivenDuplicateVertex_WhenAddingVertex_ConfirmNoDuplicates() {
         graph.addVertex("A");
-        graph.addVertex("A"); // Повторное добавление той же вершины
+        graph.addVertex("A");
         assertEquals(1, graph.size());
     }
 

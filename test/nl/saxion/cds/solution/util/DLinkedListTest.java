@@ -1,8 +1,8 @@
-package collection;
+package nl.saxion.cds.solution.util;
 
 import nl.saxion.cds.collection.EmptyCollectionException;
 import nl.saxion.cds.collection.ValueNotFoundException;
-import nl.saxion.cds.solution.DLinkedList;
+import nl.saxion.cds.solution.util.DLinkedList;
 import java.util.Iterator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

@@ -1,29 +1,35 @@
-package nl.saxion.cds.solution;
+package nl.saxion.cds.solution.util;
 
 import nl.saxion.cds.collection.EmptyCollectionException;
 import nl.saxion.cds.collection.SaxHeap;
 
-
+/**
+ * Custom heap implementation that supports basic heap operations such as enqueue, dequeue, and peek.
+ *
+ * @param <V> the type of elements stored in the heap, which must be comparable
+ */
 public class MyHeap<V extends Comparable<V>> implements SaxHeap<V> {
     MyArrayList<V> elements;
 
+    /**
+     * Initializes a new heap.
+     */
     public MyHeap() {
         elements = new MyArrayList<>();
     }
 
     /**
-     * Determines if the collection has no elements
+     * Determines if the collection has no elements.
      *
-     * @return if the collection has no elements
+     * @return true if the collection has no elements, false otherwise
      */
     @Override
     public boolean isEmpty() {
-
         return elements.isEmpty();
     }
 
     /**
-     * Determines the number of elements in this collection
+     * Determines the number of elements in this collection.
      *
      * @return size of this collection
      */
@@ -33,8 +39,8 @@ public class MyHeap<V extends Comparable<V>> implements SaxHeap<V> {
     }
 
     /**
-     * Create a String representation of the data in GraphViz (see <a href="https://graphviz.org">GraphViz</a>)
-     * format, which you can print-copy-paste on the site see <a href="https://dreampuf.github.io/GraphvizOnline">GraphViz online</a>.
+     * Creates a String representation of the data in GraphViz format.
+     * Useful for visualizing the heap structure.
      *
      * @param name name of the produced graph
      * @return a GraphViz string representation of this collection
@@ -45,12 +51,10 @@ public class MyHeap<V extends Comparable<V>> implements SaxHeap<V> {
         sb.append("digraph ").append(name).append(" {\n");
         sb.append("    node [shape=circle];\n");
 
-        // Сначала добавляем все узлы
         for (int i = 0; i < elements.size(); i++) {
             sb.append("    \"").append(elements.get(i)).append("\";\n");
         }
 
-        // Затем добавляем связи между узлами
         for (int i = 0; i < elements.size(); i++) {
             int leftChildIndex = 2 * i + 1;
             int rightChildIndex = 2 * i + 2;
@@ -69,9 +73,9 @@ public class MyHeap<V extends Comparable<V>> implements SaxHeap<V> {
     }
 
     /**
-     * Add the value to list.
+     * Adds a value to the heap, maintaining the heap property.
      *
-     * @param value the value to push
+     * @param value the value to be added to the heap
      */
     @Override
     public void enqueue(V value) {
@@ -92,9 +96,10 @@ public class MyHeap<V extends Comparable<V>> implements SaxHeap<V> {
     }
 
     /**
-     * Remove the value from the list.
+     * Removes and returns the root of the heap.
      *
-     * @return the popped value
+     * @return the root value of the heap
+     * @throws EmptyCollectionException if the heap is empty
      */
     @Override
     public V dequeue() throws EmptyCollectionException {
@@ -130,11 +135,11 @@ public class MyHeap<V extends Comparable<V>> implements SaxHeap<V> {
         return root;
     }
 
-
     /**
-     * Return the value of the list, without removing it.
+     * Returns the root value of the heap without removing it.
      *
-     * @return the value or null if the list is empty
+     * @return the root value of the heap
+     * @throws EmptyCollectionException if the heap is empty
      */
     @Override
     public V peek() throws EmptyCollectionException {

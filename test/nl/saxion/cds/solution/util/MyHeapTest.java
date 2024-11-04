@@ -1,6 +1,6 @@
-package collection;
+package nl.saxion.cds.solution.util;
 
-import nl.saxion.cds.solution.MyHeap;
+import nl.saxion.cds.solution.util.MyHeap;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import nl.saxion.cds.collection.EmptyCollectionException;

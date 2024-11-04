@@ -1,8 +1,13 @@
-package nl.saxion.cds.solution;
+package nl.saxion.cds.solution.util;
 
 import nl.saxion.cds.collection.*;
 
-
+/**
+ * Custom hash map implementation that stores key-value pairs and handles collisions using chaining.
+ *
+ * @param <K> the type of keys in the hash map
+ * @param <V> the type of values in the hash map
+ */
 public class MyHashMap<K, V> implements SaxHashMap<K, V> {
     private int size;
     private Node<K,V>[] table;
@@ -123,6 +128,12 @@ public class MyHashMap<K, V> implements SaxHashMap<K, V> {
         return null;
     }
 
+    /**
+     * Retrieves the node associated with a specified key.
+     *
+     * @param key the key whose associated node is to be returned
+     * @return the node containing the specified key, or null if the key is not found
+     */
     public Node<K, V> getNode(K key) {
         int index = getIndex(key);
         Node<K, V> node = table[index];
@@ -163,6 +174,12 @@ public class MyHashMap<K, V> implements SaxHashMap<K, V> {
         }
     }
 
+    /**
+     * Associates the specified value with the specified key. If the key exists, the value is updated.
+     *
+     * @param key   the key with which the specified value is to be associated
+     * @param value the value to be associated with the key
+     */
     public void put(K key, V value) {
         if (this.contains(key)) {
             Node<K, V> node = getNode(key);
@@ -300,10 +317,14 @@ public class MyHashMap<K, V> implements SaxHashMap<K, V> {
             this.value = value;
         }
 
+        /**
+         * Sets the value for this node.
+         *
+         * @param value the new value to set
+         */
         public void setValue(V value){
             this.value = value;
         }
 
     }
 }
-

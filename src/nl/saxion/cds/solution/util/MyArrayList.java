@@ -1,10 +1,15 @@
-package nl.saxion.cds.solution;
+package nl.saxion.cds.solution.util;
 
 import nl.saxion.cds.collection.*;
 
 import java.util.Comparator;
 import java.util.Iterator;
 
+/**
+ * Custom implementation of an ArrayList, providing functionality for dynamic resizing, search, and sorting.
+ *
+ * @param <V> the type of elements stored in the list
+ */
 public class MyArrayList<V> implements SaxList<V>, SaxSearchable<V>, SaxSortable<V> {
     // Minimal size of the internal array
     private static final int MINIMUM_SIZE = 32;
@@ -16,15 +21,29 @@ public class MyArrayList<V> implements SaxList<V>, SaxSearchable<V>, SaxSortable
     // Number of elements in use
     private int size;
 
+    /**
+     * Initializes a new ArrayList with the minimum capacity.
+     */
     public MyArrayList() {
         this(MINIMUM_SIZE);
     }
 
+    /**
+     * Initializes a new ArrayList with the specified capacity.
+     *
+     * @param capacity initial capacity of the array list
+     */
     public MyArrayList(int capacity) {
         this.size = 0;
         elements = new Object[capacity];
     }
 
+    /**
+     * Checks if the specified value is in the list.
+     *
+     * @param value the value to search for
+     * @return true if the value is in the list, false otherwise
+     */
     @Override
     // Do no type checking; a Java hack, because we store objects of a generic type V in an Object array
     @SuppressWarnings("unchecked")
@@ -36,6 +55,13 @@ public class MyArrayList<V> implements SaxList<V>, SaxSearchable<V>, SaxSortable
         return false;
     }
 
+    /**
+     * Retrieves the element at the specified index.
+     *
+     * @param index the index of the element to retrieve
+     * @return the element at the specified index
+     * @throws IndexOutOfBoundsException if the index is out of range
+     */
     @Override
     @SuppressWarnings("unchecked")
     public V get(int index) throws IndexOutOfBoundsException {
@@ -43,25 +69,48 @@ public class MyArrayList<V> implements SaxList<V>, SaxSearchable<V>, SaxSortable
         return (V) elements[index];
     }
 
+    /**
+     * Adds a value to the end of the list.
+     *
+     * @param value the value to add
+     */
     @Override
     public void addLast(V value) {
         checkAndExtendSize(size);  // Ignore invalid index => IndexOutOfBoundsException
         elements[size - 1] = value;
     }
 
+    /**
+     * Adds a value to the beginning of the list.
+     *
+     * @param value the value to add
+     */
     @Override
     public void addFirst(V value) {
         checkAndExtendSize(0); // Ignore invalid index => IndexOutOfBoundsException
         elements[0] = value;
     }
 
+    /**
+     * Inserts a value at the specified index.
+     *
+     * @param index the index at which to insert the value
+     * @param value the value to add
+     * @throws IndexOutOfBoundsException if the index is out of range
+     */
     @Override
     public void addAt(int index, V value) throws IndexOutOfBoundsException {
         checkAndExtendSize(index); // Ignore invalid index => IndexOutOfBoundsException
         elements[index] = value;
     }
 
-
+    /**
+     * Sets the element at the specified index.
+     *
+     * @param index the index at which to set the value
+     * @param value the value to set
+     * @throws IndexOutOfBoundsException if the index is out of range
+     */
     @Override
     public void set(int index, V value) throws IndexOutOfBoundsException {
         if (index < 0 || index >= size)
@@ -69,6 +118,12 @@ public class MyArrayList<V> implements SaxList<V>, SaxSearchable<V>, SaxSortable
         elements[index] = value;
     }
 
+    /**
+     * Removes and returns the last element in the list.
+     *
+     * @return the removed element
+     * @throws EmptyCollectionException if the list is empty
+     */
     @Override
     // Do no type checking; a Java hack, because we store objects of a generic type V in an Object array
     @SuppressWarnings("unchecked")
@@ -79,6 +134,12 @@ public class MyArrayList<V> implements SaxList<V>, SaxSearchable<V>, SaxSortable
         return value;
     }
 
+    /**
+     * Removes and returns the first element in the list.
+     *
+     * @return the removed element
+     * @throws EmptyCollectionException if the list is empty
+     */
     @Override
     // Do no type checking; a Java hack, because we store objects of a generic type V in an Object array
     @SuppressWarnings("unchecked")
@@ -89,6 +150,13 @@ public class MyArrayList<V> implements SaxList<V>, SaxSearchable<V>, SaxSortable
         return value;
     }
 
+    /**
+     * Removes and returns the element at the specified index.
+     *
+     * @param index the index of the element to remove
+     * @return the removed element
+     * @throws IndexOutOfBoundsException if the index is out of range
+     */
     @Override
     // Do no type checking; a Java hack, because we store objects of a generic type V in an Object array
     @SuppressWarnings("unchecked")
@@ -104,6 +172,12 @@ public class MyArrayList<V> implements SaxList<V>, SaxSearchable<V>, SaxSortable
         return value;
     }
 
+    /**
+     * Removes the specified value from the list.
+     *
+     * @param value the value to remove
+     * @throws ValueNotFoundException if the value is not found in the list
+     */
     @Override
     public void remove(V value) throws ValueNotFoundException {
         int index = 0;
@@ -120,16 +194,32 @@ public class MyArrayList<V> implements SaxList<V>, SaxSearchable<V>, SaxSortable
         removeAt(index);
     }
 
+    /**
+     * Determines if the list is empty.
+     *
+     * @return true if the list is empty, false otherwise
+     */
     @Override
     public boolean isEmpty() {
         return size == 0;
     }
 
+    /**
+     * Returns the number of elements in the list.
+     *
+     * @return the number of elements in the list
+     */
     @Override
     public int size() {
         return size;
     }
 
+    /**
+     * Creates a GraphViz representation of the list.
+     *
+     * @param name the name of the produced graph
+     * @return a GraphViz string representation of the list
+     */
     @Override
     // Do no type checking; a Java hack, because we store objects of a generic type V in an Object array
     @SuppressWarnings("unchecked")
@@ -290,21 +380,24 @@ public class MyArrayList<V> implements SaxList<V>, SaxSearchable<V>, SaxSortable
             if (left <= end && comparator.compare(this.get(left), pivot) <= 0) {
                 left++;
             }
-
             if (right >= begin && comparator.compare(this.get(right), pivot) > 0) {
                 right--;
             }
-
             if (left < right) {
                 this.swap(left, right);
             }
-
         }
         this.swap(begin, right);
 
-        return right; // Returns index of pivot
+        return right;
     }
 
+    /**
+     * Searches for the specified element using linear search.
+     *
+     * @param element the element to search for
+     * @return the index of the element if found, or NOT_FOUND if not found
+     */
     @Override
     public int linearSearch(Object element) {
         for (int i = 0; i < size; ++i) {
@@ -345,14 +438,12 @@ public class MyArrayList<V> implements SaxList<V>, SaxSearchable<V>, SaxSortable
             }
             middle = (left + right) / 2;
         }
-
         return SaxSearchable.NOT_FOUND;
     }
 
     @Override
     public Iterator<V> iterator() {
         return new Iterator<>() {
-
             private int currentIndex = 0;
 
             @Override

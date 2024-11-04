@@ -1,10 +1,16 @@
-package nl.saxion.cds.solution;
+package nl.saxion.cds.solution.util;
 
 import nl.saxion.cds.collection.DuplicateKeyException;
 import nl.saxion.cds.collection.KeyNotFoundException;
 import nl.saxion.cds.collection.SaxBinaryTree;
 import nl.saxion.cds.collection.SaxList;
 
+/**
+ * Custom binary search tree implementation with AVL balancing, supporting basic operations like add, remove, and search.
+ *
+ * @param <K> the type of keys, which must be comparable
+ * @param <V> the type of values associated with the keys
+ */
 public class MyBinaryTree<K extends Comparable<K>, V> implements SaxBinaryTree<K, V> {
     TreeNode<K,V> root;
     int size;
@@ -33,6 +39,12 @@ public class MyBinaryTree<K extends Comparable<K>, V> implements SaxBinaryTree<K
         return (node != null) ? node.getValue() : null;
     }
 
+    /**
+     * Finds and returns the node associated with the specified key.
+     *
+     * @param key the key to locate
+     * @return the node with the given key or null if not found
+     */
     private TreeNode<K,V> getTreeNode(K key) {
         TreeNode<K,V> current = root;
         while (current != null) {
@@ -65,6 +77,13 @@ public class MyBinaryTree<K extends Comparable<K>, V> implements SaxBinaryTree<K
         size++;
     }
 
+    /**
+     * Recursively adds a new node to the tree, balancing as necessary.
+     *
+     * @param current the current node in the recursion
+     * @param node    the new node to add
+     * @return the balanced subtree with the new node added
+     */
     private TreeNode<K, V> addTreeNode(TreeNode<K, V> current, TreeNode<K, V> node) {
         if (current == null) {
             return node;
@@ -99,6 +118,13 @@ public class MyBinaryTree<K extends Comparable<K>, V> implements SaxBinaryTree<K
         return value;
     }
 
+    /**
+     * Recursively removes a node with the specified key from the tree, balancing as necessary.
+     *
+     * @param node the current node in the recursion
+     * @param key  the key of the node to remove
+     * @return the balanced subtree with the node removed
+     */
     private TreeNode<K, V> removeTreeNode(TreeNode<K, V> node, K key) {
         if (node == null) return null;
 
@@ -130,6 +156,12 @@ public class MyBinaryTree<K extends Comparable<K>, V> implements SaxBinaryTree<K
         return balance(node);
     }
 
+    /**
+     * Retrieves the minimum node in a given subtree.
+     *
+     * @param node the root of the subtree
+     * @return the node with the minimum key
+     */
     private TreeNode<K, V> getMinNode(TreeNode<K, V> node) {
         TreeNode<K, V> current = node;
         while (current.left != null) {
@@ -138,18 +170,41 @@ public class MyBinaryTree<K extends Comparable<K>, V> implements SaxBinaryTree<K
         return current;
     }
 
+    /**
+     * Updates the height of a node based on its children's heights.
+     *
+     * @param node the node to update
+     */
     private void updateHeight(TreeNode<K, V> node) {
         node.height = 1 + Math.max(height(node.left), height(node.right));
     }
 
+    /**
+     * Retrieves the height of a node.
+     *
+     * @param node the node whose height is to be retrieved
+     * @return the height of the node, or 0 if null
+     */
     private int height(TreeNode<K, V> node) {
         return (node == null) ? 0 : node.height;
     }
 
+    /**
+     * Calculates the balance factor of a node.
+     *
+     * @param node the node whose balance factor is to be calculated
+     * @return the balance factor of the node
+     */
     private int getBalance(TreeNode<K, V> node) {
         return height(node.left) - height(node.right);
     }
 
+    /**
+     * Balances a node if it is unbalanced by performing rotations.
+     *
+     * @param node the node to balance
+     * @return the balanced node
+     */
     private TreeNode<K, V> balance(TreeNode<K, V> node) {
         int balanceFactor = getBalance(node);
 
@@ -169,6 +224,13 @@ public class MyBinaryTree<K extends Comparable<K>, V> implements SaxBinaryTree<K
         return node;
     }
 
+    /**
+     * Performs a rotation on a node in the specified direction.
+     *
+     * @param node      the node to rotate
+     * @param direction the direction of the rotation (left or right)
+     * @return the new root of the rotated subtree
+     */
     private TreeNode<K, V> rotate(TreeNode<K, V> node, Direction direction) {
         TreeNode<K, V> newRoot;
         if (direction == Direction.LEFT) {
@@ -207,7 +269,9 @@ public class MyBinaryTree<K extends Comparable<K>, V> implements SaxBinaryTree<K
     }
 
     /**
-     * @return
+     * Retrieves a list of all keys in the tree in sorted order.
+     *
+     * @return a list of all keys in ascending order
      */
     @Override
     public SaxList<K> getKeys() {
@@ -216,6 +280,12 @@ public class MyBinaryTree<K extends Comparable<K>, V> implements SaxBinaryTree<K
         return keys;
     }
 
+    /**
+     * Adds keys to the list in in-order traversal, ensuring sorted order.
+     *
+     * @param node the current node in the traversal
+     * @param keys the list of keys being populated
+     */
     private void getKeysInOrder(TreeNode<K, V> node, SaxList<K> keys) {
         if (node != null) {
             getKeysInOrder(node.left, keys);
@@ -261,6 +331,12 @@ public class MyBinaryTree<K extends Comparable<K>, V> implements SaxBinaryTree<K
         return sb.toString();
     }
 
+    /**
+     * Recursively generates the GraphViz representation for the binary tree.
+     *
+     * @param sb   the StringBuilder to append GraphViz content
+     * @param node the current node in the recursion
+     */
     private void generateGraphViz(StringBuilder sb, TreeNode<K, V> node) {
         if (node != null) {
             sb.append("    ").append(node.getKey()).append(" [label=\"").append(node.getValue()).append("\"];\n");
@@ -277,6 +353,12 @@ public class MyBinaryTree<K extends Comparable<K>, V> implements SaxBinaryTree<K
         }
     }
 
+    /**
+     * Represents a node in the binary tree with key, value, height, and pointers to parent and children.
+     *
+     * @param <K> the type of keys
+     * @param <V> the type of values
+     */
     private static class TreeNode<K extends Comparable<K>, V> {
         K key;
         V value;
@@ -285,23 +367,46 @@ public class MyBinaryTree<K extends Comparable<K>, V> implements SaxBinaryTree<K
         TreeNode<K, V> parent;
         int height;
 
+        /**
+         * Gets the key stored in this node.
+         *
+         * @return the key of this node
+         */
         public final K getKey() {
             return key;
         }
 
+        /**
+         * Gets the value stored in this node.
+         *
+         * @return the value of this node
+         */
         public final V getValue() {
             return value;
         }
 
-        public TreeNode(K key, V value) {
-            this(key, value, null);
-        }
-
+        /**
+         * Initializes a new node with the specified key, value, and optional parent node.
+         *
+         * @param key    the key of the node
+         * @param value  the value of the node
+         * @param parent the parent node
+         */
         public TreeNode(K key, V value, TreeNode<K, V> parent) {
             this.key = key;
             this.value = value;
             this.parent = parent;
             this.height = 1;
+        }
+
+        /**
+         * Initializes a new node with the specified key and value.
+         *
+         * @param key   the key of the node
+         * @param value the value of the node
+         */
+        public TreeNode(K key, V value) {
+            this(key, value, null);
         }
     }
 }

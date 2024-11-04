@@ -1,4 +1,4 @@
-package nl.saxion.cds.solution;
+package nl.saxion.cds.solution.util;
 
 import nl.saxion.cds.collection.KeyNotFoundException;
 import nl.saxion.cds.collection.SaxGraph;
@@ -7,9 +7,16 @@ import nl.saxion.cds.collection.SaxList;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
+/**
+ * Implementation of a directed graph structure with weighted edges, supporting various graph algorithms
+ * such as Dijkstra and A* for finding shortest paths, as well as minimum cost spanning tree calculation.
+ *
+ * @param <V> the type of vertices in the graph
+ */
 public class MyGraph<V> implements SaxGraph<V> {
 
     private MyHashMap<V, MyArrayList<DirectedEdge<V>>> map = new MyHashMap<>();
+
     /**
      * Determines if the collection has no elements
      *
@@ -60,6 +67,11 @@ public class MyGraph<V> implements SaxGraph<V> {
         return builder.toString();
     }
 
+    /**
+     * Adds a vertex to the graph if it does not already exist.
+     *
+     * @param value the value of the vertex to be added
+     */
     public void addVertex(V value) {
         if (!map.contains(value)) {
             map.add(value, new MyArrayList<DirectedEdge<V>>());
@@ -172,7 +184,6 @@ public class MyGraph<V> implements SaxGraph<V> {
         return result;
     }
 
-
     /**
      * Execute the A* algorithm to determine the shortest path from startNode to endNode.
      *
@@ -216,6 +227,13 @@ public class MyGraph<V> implements SaxGraph<V> {
         return null;
     }
 
+    /**
+     * Reconstructs the shortest path from the closed list.
+     *
+     * @param closedList the map of visited nodes and their paths
+     * @param goalNode   the target node to reconstruct the path to
+     * @return a list of edges representing the path from startNode to goalNode
+     */
     private SaxList<DirectedEdge<V>> reconstructPath(MyHashMap<V, AStarNode> closedList, AStarNode goalNode) {
         MyArrayList<DirectedEdge<V>> path = new MyArrayList<>();
         AStarNode current = goalNode;
@@ -260,22 +278,47 @@ public class MyGraph<V> implements SaxGraph<V> {
         return mst;
     }
 
+    /**
+     * Retrieves the first node from the graph.
+     *
+     * @return the first node, or null if the graph is empty
+     */
     private V getFirstNode() {
         Iterator<V> nodeIterator = map.getKeys().iterator();
         return nodeIterator.hasNext() ? nodeIterator.next() : null;
     }
 
+    /**
+     * Adds a node to the Minimum Cost Spanning Tree (MCST) and marks it as visited.
+     *
+     * @param node         the node to add
+     * @param mst          the graph representing the MCST
+     * @param visitedNodes the map of visited nodes
+     */
     private void addNodeToMST(V node, MyGraph<V> mst, MyHashMap<V, Boolean> visitedNodes) {
         mst.addVertex(node);
         visitedNodes.add(node, true);
     }
 
+    /**
+     * Adds all edges from the specified node to a heap for processing in the MCST algorithm.
+     *
+     * @param node     the node whose edges to add
+     * @param edgeHeap the heap to add edges to
+     */
     private void addEdgesToHeap(V node, MyHeap<DirectedEdge<V>> edgeHeap) {
         for (DirectedEdge<V> edge : map.get(node)) {
             edgeHeap.enqueue(edge);
         }
     }
 
+    /**
+     * Adds an edge to the Minimum Cost Spanning Tree (MCST) and marks the target node as visited.
+     *
+     * @param edge         the edge to add to the MCST
+     * @param mst          the graph representing the MCST
+     * @param visitedNodes the map of visited nodes
+     */
     private void addEdgeToMST(DirectedEdge<V> edge, MyGraph<V> mst, MyHashMap<V, Boolean> visitedNodes) {
         V from = edge.from();
         V to = edge.to();
@@ -297,15 +340,24 @@ public class MyGraph<V> implements SaxGraph<V> {
         return new DFSIterator();
     }
 
+    /**
+     * Depth-first search iterator for traversing the graph's vertices.
+     */
     private class DFSIterator implements Iterator<V> {
         private final MyHashMap<V, Boolean> visited = new MyHashMap<>();
         private final MyStack<V> stack = new MyStack<>();
         private final Iterator<V> keyIterator = map.getKeys().iterator();
 
+        /**
+         * Initializes the DFS iterator and finds the first unvisited vertex.
+         */
         public DFSIterator() {
             findNextUnvisitedVertex();
         }
 
+        /**
+         * Finds the next unvisited vertex and pushes it onto the stack.
+         */
         private void findNextUnvisitedVertex() {
             while (stack.isEmpty() && keyIterator.hasNext()) {
                 V vertex = keyIterator.next();
@@ -317,11 +369,22 @@ public class MyGraph<V> implements SaxGraph<V> {
             }
         }
 
+        /**
+         * Checks if there are more vertices to visit in the DFS traversal.
+         *
+         * @return true if there are more vertices to visit, false otherwise
+         */
         @Override
         public boolean hasNext() {
             return !stack.isEmpty();
         }
 
+        /**
+         * Returns the next vertex in the DFS traversal.
+         *
+         * @return the next vertex in the traversal
+         * @throws NoSuchElementException if there are no more elements
+         */
         @Override
         public V next() {
             if (!hasNext()) {
@@ -344,17 +407,34 @@ public class MyGraph<V> implements SaxGraph<V> {
         }
     }
 
+    /**
+     * A node in the A* algorithm, representing a vertex with associated cost values.
+     */
     public class AStarNode implements Comparable<AStarNode> {
         double g;
         double h;
         DirectedEdge<V> directedEdge;
 
+        /**
+         * Constructs an AStarNode with specified edge, cost to reach, and estimated cost to goal.
+         *
+         * @param edge the edge leading to this node
+         * @param g    the cost to reach this node
+         * @param h    the estimated cost from this node to the goal
+         */
         public AStarNode(DirectedEdge<V> edge, double g, double h) {
             this.directedEdge = edge;
             this.g = g;
             this.h = h;
         }
 
+        /**
+         * Compares this node with another based on total estimated cost (g + h).
+         *
+         * @param other the other node to compare
+         * @return a negative integer, zero, or a positive integer as this node's cost is less than,
+         * equal to, or greater than the other node's cost
+         */
         @Override
         public int compareTo(AStarNode other) {
             return Double.compare(this.g + this.h, other.g + other.h);
