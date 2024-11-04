@@ -11,11 +11,11 @@ import java.util.Comparator;
 import java.util.Scanner;
 
 /**
- * Main class for the Track Manager Application. Loads station and track data from CSV files
+ * MainTerminal class for the Track Manager Application. Loads station and track data from CSV files
  * and provides an interactive menu for users to view and search station information,
  * find routes, and compute a Minimum Cost Spanning Tree.
  */
-public class Main {
+public class MainTerminal {
     private static final Scanner scanner = new Scanner(System.in);
 
     /**

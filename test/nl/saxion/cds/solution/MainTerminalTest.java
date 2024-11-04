@@ -10,21 +10,18 @@ import nl.saxion.cds.solution.util.MyHashMap;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.PrintStream;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-public class MainTest {
+public class MainTerminalTest {
 
     private MyHashMap<String, Station> stationsMock;
     private MyGraph<Station> graphMock;
@@ -49,7 +46,7 @@ public class MainTest {
 
     @Test
     public void testDisplayMenu() {
-        Main.displayMenu();
+        MainTerminal.displayMenu();
         assertTrue(outContent.toString().contains("--- Track Manager Application ---"));
     }
 
@@ -58,7 +55,7 @@ public class MainTest {
         Station station = new Station("ST1", "Station One", "Country A", "Type A", new Coordinate(52.0, 5.0));
         when(stationsMock.get("ST1")).thenReturn(station);
 
-        Main.showStationByCode(stationsMock, "ST1");
+        MainTerminal.showStationByCode(stationsMock, "ST1");
 
         verify(stationsMock).get("ST1");
     }
@@ -67,7 +64,7 @@ public class MainTest {
     public void testShowStationByCode_NonExistingStation() {
         when(stationsMock.get("ST2")).thenReturn(null);
 
-        Main.showStationByCode(stationsMock, "ST2");
+        MainTerminal.showStationByCode(stationsMock, "ST2");
 
         verify(stationsMock).get("ST2");
     }
@@ -76,7 +73,7 @@ public class MainTest {
     public void testSearchStationsByName_NoMatches() {
         when(stationsMock.getKeys()).thenReturn(new MyArrayList<>());
 
-        Main.searchStationsByName(stationsMock, "NotExist");
+        MainTerminal.searchStationsByName(stationsMock, "NotExist");
 
         verify(stationsMock).getKeys();
     }
@@ -87,7 +84,7 @@ public class MainTest {
     public void testListStationsByType_NoMatches() {
         when(stationsMock.getKeys()).thenReturn(new MyArrayList<>());
 
-        Main.listStationsByType(stationsMock, "Type X");
+        MainTerminal.listStationsByType(stationsMock, "Type X");
 
         verify(stationsMock).getKeys();
     }
@@ -105,7 +102,7 @@ public class MainTest {
         when(stationsMock.get("ST1")).thenReturn(station1);
         when(stationsMock.get("ST2")).thenReturn(station2);
 
-        Main.listStationsByType(stationsMock, "Type A");
+        MainTerminal.listStationsByType(stationsMock, "Type A");
 
         verify(stationsMock).getKeys();
     }
@@ -117,7 +114,7 @@ public class MainTest {
 
         when(graphMock.shortestPathAStar(eq(startStation), eq(endStation), any())).thenReturn(null);
 
-        Main.findShortestRoute(graphMock, startStation, endStation);
+        MainTerminal.findShortestRoute(graphMock, startStation, endStation);
 
         verify(graphMock).shortestPathAStar(eq(startStation), eq(endStation), any());
     }
@@ -132,7 +129,7 @@ public class MainTest {
 
         when(graphMock.shortestPathAStar(eq(startStation), eq(endStation), any())).thenReturn(path);
 
-        Main.findShortestRoute(graphMock, startStation, endStation);
+        MainTerminal.findShortestRoute(graphMock, startStation, endStation);
 
         verify(graphMock).shortestPathAStar(eq(startStation), eq(endStation), any());
     }
@@ -159,7 +156,7 @@ public class MainTest {
         };
         when(mcstMock.iterator()).thenReturn(emptyIterator);
 
-        Main.computeMCST(graphMock);
+        MainTerminal.computeMCST(graphMock);
 
         verify(graphMock).minimumCostSpanningTree();
         verify(mcstMock).getTotalWeight();
@@ -184,7 +181,7 @@ public class MainTest {
         ByteArrayOutputStream outContent = new ByteArrayOutputStream();
         System.setOut(new PrintStream(outContent));
 
-        Main.searchStationsByName(stationsMock, "Station");
+        MainTerminal.searchStationsByName(stationsMock, "Station");
 
         verify(stationsMock).getKeys();
 
